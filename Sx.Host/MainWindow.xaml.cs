@@ -26,13 +26,15 @@ public partial class MainWindow : Window
         this.GetCurrentExchangesRates(NbpTableType.A);
     }
 
-    public void GetCurrentExchangesRates(NbpTableType nbpTableType)
+    public async Task<MessageResponseApplicationSx> GetCurrentExchangesRates(NbpTableType nbpTableType)
     {
         MessageRequestCurrentExchangeRates messageRequestCurrentExchangeRates = new()
         {
             NbpTableType = nbpTableType
         };
 
-        this.applicationSx.GetCurrentExchangeRatesTable(messageRequestCurrentExchangeRates);
+        var test = await this.applicationSx.GetCurrentExchangeRatesTable(messageRequestCurrentExchangeRates);
+
+        return test;
     }
 }

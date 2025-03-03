@@ -3,7 +3,7 @@ using Sx.Models;
 
 namespace Sx.Messages.DataServices
 {
-    public class MessageResponseDataNbp
+    public class MessageResponseDataNbp : MessageResponseErrors
     {
         private List<ExchangeRateTable> exchangeRateTables = new();
 
@@ -18,7 +18,10 @@ namespace Sx.Messages.DataServices
         public void SetExchangeRateTables(IEnumerable<ExchangeRateTable> exchangeRateTables)
         {
             this.exchangeRateTables.Clear();
-            this.exchangeRateTables.AddRange(exchangeRateTables);
+            if (exchangeRateTables != null)
+            {
+                this.exchangeRateTables.AddRange(exchangeRateTables);
+            }
         }
     }
 }

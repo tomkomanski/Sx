@@ -2,8 +2,24 @@
 
 namespace Sx.Messages.ConnectorServices
 {
-    public class MessageResponseConnector
+    public class MessageResponseConnector : MessageResponseErrors
     {
-        public String Data { get; set; }
+        private String data = String.Empty;
+
+        public String Data 
+        { 
+            get
+            {
+                return this.data;
+            }
+        }
+
+        public void SetData(String data)
+        {
+            if (!String.IsNullOrEmpty(data))
+            {
+                this.data = data;
+            }
+        }
     }
 }

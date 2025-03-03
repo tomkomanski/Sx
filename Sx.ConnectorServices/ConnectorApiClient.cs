@@ -1,5 +1,7 @@
-﻿using Sx.Messages.ConnectorServices;
+﻿using System;
+using System.Net;
 using System.Net.Http.Headers;
+using Sx.Messages.ConnectorServices;
 
 namespace Sx.ConnectorServices
 {
@@ -19,16 +21,19 @@ namespace Sx.ConnectorServices
             try
             {
                 HttpResponseMessage response = await client.GetAsync(messageRequestConnector.Url);
-                response.EnsureSuccessStatusCode();
 
-                String responseBody = await response.Content.ReadAsStringAsync();
-                messageResponseConnector.Data = responseBody;
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    messageResponseConnector.SetData(await response.Content.ReadAsStringAsync());
+                }
+                else
+                {
+                    messageResponseConnector.AddError(response.StatusCode.ToString());
+                }
             }
-            catch (HttpRequestException e)
+            catch (HttpRequestException ex)
             {
-                // ToDo error handling
-                Console.WriteLine("Błąd zapytania HTTP: " + e.Message);
-
+                messageResponseConnector.AddError(ex.Message);
             }
 
             return messageResponseConnector;

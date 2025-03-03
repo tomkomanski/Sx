@@ -1,5 +1,5 @@
-﻿using Sx.Models;
-using System;
+﻿using System;
+using Sx.Models;
 
 namespace Sx.Messages.ApplicationServices
 {

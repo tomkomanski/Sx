@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Text.Json;
 using Sx.Messages.DataServices;
+using Sx.Models;
 
 namespace Sx.DataServices
 {
@@ -11,8 +13,15 @@ namespace Sx.DataServices
         {
             MessageResponseDataNbp messageResponseDataNbp = new();
 
-
-            //ToDo error handling
+            try
+            {
+                ExchangeRateTable[] currencyRates = JsonSerializer.Deserialize<ExchangeRateTable[]>(messageRequestDataNbp.Data);
+                messageResponseDataNbp.SetExchangeRateTables(currencyRates);
+            }
+            catch (Exception ex)
+            {
+                messageResponseDataNbp.AddError(ex.Message);
+            }
 
             return messageResponseDataNbp;
         }
