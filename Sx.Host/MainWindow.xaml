@@ -8,6 +8,13 @@
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <Button x:Name="ButtonGetCurrentData" Content="Get current data" HorizontalAlignment="Left" Margin="48,105,0,0" VerticalAlignment="Top" Click="ButtonGetCurrentData_Click"/>
-
+        <DataGrid x:Name="CurrencyDataGrid" Margin="400,21,34,124" IsReadOnly="True" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Date" Binding="{Binding DateTime, StringFormat='dd-MM-yyyy'}" />
+                <DataGridTextColumn Header="Currency" Binding="{Binding Currency}" />
+                <DataGridTextColumn Header="Code" Binding="{Binding Code}" />
+                <DataGridTextColumn Header="Mid" Binding="{Binding Mid}" />
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </Window>

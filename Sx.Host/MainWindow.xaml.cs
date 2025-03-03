@@ -1,6 +1,7 @@
 ﻿using Sx.ApplicationServices;
 using Sx.Messages.ApplicationServices;
 using Sx.Models;
+using System.Collections.Generic;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -22,18 +23,34 @@ public partial class MainWindow : Window
     {
         this.applicationSx = applicationSx;
         InitializeComponent();
+        //InitializeCustom();
+    }
+
+    private void InitializeCustom()
+    {
+        CurrencyDataGrid.ItemsSource = new List<CurrencyData>();
     }
 
     private async void ButtonGetCurrentData_Click(object sender, RoutedEventArgs e)
     {
         ButtonGetCurrentData.IsEnabled = false;
+        CurrencyDataGrid.ItemsSource = new List<CurrencyData>();
 
         MessageRequestCurrentExchangeRates messageRequestCurrentExchangeRates = new()
         {
             NbpTableType = NbpTableType.A
         };
 
-        var test = await this.applicationSx.GetCurrentExchangeRatesTable(messageRequestCurrentExchangeRates);
+        MessageResponseApplicationSx messageResponseApplicationSx = await this.applicationSx.GetCurrentExchangeRatesTable(messageRequestCurrentExchangeRates);
+        if (messageResponseApplicationSx.IsSuccessed)
+        {
+            CurrencyDataGrid.ItemsSource = null;
+            CurrencyDataGrid.ItemsSource = messageResponseApplicationSx.CurrencyData;
+        }
+        else
+        {
+            // ToDo error handling
+        }
 
         ButtonGetCurrentData.IsEnabled = true;
     }
