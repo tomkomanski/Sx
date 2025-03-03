@@ -22,19 +22,19 @@ public partial class MainWindow : Window
     {
         this.applicationSx = applicationSx;
         InitializeComponent();
-
-        this.GetCurrentExchangesRates(NbpTableType.A);
     }
 
-    public async Task<MessageResponseApplicationSx> GetCurrentExchangesRates(NbpTableType nbpTableType)
+    private async void ButtonGetCurrentData_Click(object sender, RoutedEventArgs e)
     {
+        ButtonGetCurrentData.IsEnabled = false;
+
         MessageRequestCurrentExchangeRates messageRequestCurrentExchangeRates = new()
         {
-            NbpTableType = nbpTableType
+            NbpTableType = NbpTableType.A
         };
 
         var test = await this.applicationSx.GetCurrentExchangeRatesTable(messageRequestCurrentExchangeRates);
 
-        return test;
+        ButtonGetCurrentData.IsEnabled = true;
     }
 }

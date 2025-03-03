@@ -7,6 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
+        <Button x:Name="ButtonGetCurrentData" Content="Get current data" HorizontalAlignment="Left" Margin="48,105,0,0" VerticalAlignment="Top" Click="ButtonGetCurrentData_Click"/>
 
     </Grid>
 </Window>
