@@ -1,20 +1,25 @@
-﻿<Window x:Class="Sx.Host.MainWindow"
+﻿<Window x:Name="MainWindow1" x:Class="Sx.Host.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Sx.Host"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <Button x:Name="ButtonGetCurrentData" Content="Get current data" HorizontalAlignment="Left" Margin="48,105,0,0" VerticalAlignment="Top" Click="ButtonGetCurrentData_Click"/>
-        <DataGrid x:Name="CurrencyDataGrid" Margin="400,21,34,124" IsReadOnly="True" AutoGenerateColumns="False">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Date" Binding="{Binding DateTime, StringFormat='dd-MM-yyyy'}" />
-                <DataGridTextColumn Header="Currency" Binding="{Binding Currency}" />
-                <DataGridTextColumn Header="Code" Binding="{Binding Code}" />
-                <DataGridTextColumn Header="Mid" Binding="{Binding Mid}" />
-            </DataGrid.Columns>
-        </DataGrid>
-    </Grid>
+        Title="NBP" Height="590" Width="800" ResizeMode="NoResize">
+    <Window.Background>
+        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="White"/>
+            <GradientStop Color="#FF908ECA" Offset="1"/>
+        </LinearGradientBrush>
+    </Window.Background>
+    <Canvas Margin="0,0,0,0" Width="780" Height="560" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <GroupBox x:Name="CurrentRates" Header="Current rates" BorderBrush="Black" Canvas.Left="32" Canvas.Top="10" HorizontalAlignment="Left" VerticalAlignment="Center">
+            <Canvas Height="70" Width="130" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <ComboBox x:Name="Table_kind" Width="90" Canvas.Left="20" Canvas.Top="10" HorizontalAlignment="Left" VerticalAlignment="Center" Height="20"/>
+                <Button x:Name="ButtonGetCurrentData" Content="Get current data" Click="ButtonGetCurrentData_Click" RenderTransformOrigin="0.483,2.661" Canvas.Left="20" Canvas.Top="40" HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Height="20"/>
+            </Canvas>
+        </GroupBox>
+        <DataGrid x:Name="CurrencyDataGrid" IsReadOnly="True" AutoGenerateColumns="True" Height="540" Canvas.Left="212" Canvas.Top="10" Width="558" HorizontalAlignment="Center" VerticalAlignment="Center" ColumnWidth="*"/>
+    </Canvas>
+
 </Window>

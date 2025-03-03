@@ -23,33 +23,35 @@ public partial class MainWindow : Window
     {
         this.applicationSx = applicationSx;
         InitializeComponent();
-        //InitializeCustom();
+        InitializeCustom();
     }
 
     private void InitializeCustom()
     {
-        CurrencyDataGrid.ItemsSource = new List<CurrencyData>();
+        Table_kind.ItemsSource = Enum.GetValues(typeof(NbpTableKind));
+        Table_kind.SelectedItem = NbpTableKind.A;
     }
 
     private async void ButtonGetCurrentData_Click(object sender, RoutedEventArgs e)
     {
         ButtonGetCurrentData.IsEnabled = false;
-        CurrencyDataGrid.ItemsSource = new List<CurrencyData>();
+        CurrencyDataGrid.ItemsSource = null;
+
+        NbpTableKind nbpTableKind = (NbpTableKind)Table_kind.SelectedItem;
 
         MessageRequestCurrentExchangeRates messageRequestCurrentExchangeRates = new()
         {
-            NbpTableType = NbpTableType.A
+            NbpTableType = nbpTableKind
         };
 
         MessageResponseApplicationSx messageResponseApplicationSx = await this.applicationSx.GetCurrentExchangeRatesTable(messageRequestCurrentExchangeRates);
         if (messageResponseApplicationSx.IsSuccessed)
         {
-            CurrencyDataGrid.ItemsSource = null;
             CurrencyDataGrid.ItemsSource = messageResponseApplicationSx.CurrencyData;
         }
         else
         {
-            // ToDo error handling
+            MessageBox.Show(messageResponseApplicationSx.Errors, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         ButtonGetCurrentData.IsEnabled = true;

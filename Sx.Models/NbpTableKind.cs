@@ -1,9 +1,8 @@
 ﻿namespace Sx.Models
 {
-    public enum NbpTableType
+    public enum NbpTableKind
     {
         A,
         B,
-        C,
     }
 }

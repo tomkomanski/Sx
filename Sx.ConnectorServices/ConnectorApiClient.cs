@@ -28,12 +28,34 @@ namespace Sx.ConnectorServices
                 }
                 else
                 {
-                    messageResponseConnector.AddError(response.StatusCode.ToString());
+                    messageResponseConnector.AddError($"API: {(Int32)response.StatusCode} {response.ToString()}");
+                }
+            }
+            catch (AggregateException ex)
+            {
+                if (ex.InnerException is HttpRequestException)
+                {
+                    HttpRequestException exception = (HttpRequestException)ex.InnerException;
+                    if (exception.StatusCode.HasValue)
+                    {
+                        messageResponseConnector.AddError($"API: {(Int32)exception.StatusCode} {exception.ToString()}");
+                    }
+                    else
+                    {
+                        messageResponseConnector.AddError($"API: {ex.Message}");
+                    }
                 }
             }
             catch (HttpRequestException ex)
             {
-                messageResponseConnector.AddError(ex.Message);
+                if (ex.StatusCode.HasValue)
+                {
+                    messageResponseConnector.AddError($"API: {(Int32)ex.StatusCode} {ex.ToString()}");
+                }
+                else
+                {
+                    messageResponseConnector.AddError($"API: {ex.Message}");
+                }
             }
 
             return messageResponseConnector;

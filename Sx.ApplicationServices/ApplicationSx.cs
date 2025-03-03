@@ -45,12 +45,12 @@ namespace Sx.ApplicationServices
                         List<CurrencyData> currencyData = new();
                         foreach (ExchangeRateTable i in messageResponseDataNbp.ExchangeRateTables)
                         {
-                            DateTime dateTime = i.EffectiveDate;
+                            String date = i.EffectiveDate.ToString("dd.MM.yyyy");
                             foreach (ExchangeRate j in i.Rates)
                             {
                                 CurrencyData item = new()
                                 {
-                                    DateTime = dateTime,
+                                    DateTime = date,
                                     Currency = j.Currency,
                                     Code = j.Code,
                                     Mid = j.Mid

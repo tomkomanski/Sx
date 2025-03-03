@@ -4,9 +4,9 @@ namespace Sx.Models
 {
     public class CurrencyData
     {
-        public DateTime DateTime { get; set; }
-        public string Currency { get; set; }
-        public string Code { get; set; }
-        public decimal Mid { get; set; }
+        public String DateTime { get; set; }
+        public String Currency { get; set; }
+        public String Code { get; set; }
+        public Decimal Mid { get; set; }
     }
 }
