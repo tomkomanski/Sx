@@ -1,2 +1,2 @@
 # Sx
-NBP web API client, simple to enhance
+NBP web API client, simple to enhance.
