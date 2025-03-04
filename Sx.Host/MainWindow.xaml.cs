@@ -1,7 +1,4 @@
-﻿using Sx.ApplicationServices;
-using Sx.Messages.ApplicationServices;
-using Sx.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,7 +9,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using static System.Net.Mime.MediaTypeNames;
+using Sx.ApplicationServices;
+using Sx.Messages.ApplicationServices;
+using Sx.Models;
 
 namespace Sx.Host;
 
@@ -29,8 +28,11 @@ public partial class MainWindow : Window
 
     private void InitializeCustom()
     {
-        this.Table_kind.ItemsSource = Enum.GetValues(typeof(NbpTableKind));
-        this.Table_kind.SelectedItem = NbpTableKind.A;
+        this.TableKindCurrent.ItemsSource = Enum.GetValues(typeof(NbpTableKind));
+        this.TableKindCurrent.SelectedItem = NbpTableKind.A;
+
+        this.TableKindArchived.ItemsSource = Enum.GetValues(typeof(NbpTableKind));
+        this.TableKindArchived.SelectedItem = NbpTableKind.A;
     }
 
     private async void ButtonGetCurrentData_Click(object sender, RoutedEventArgs e)
@@ -38,7 +40,32 @@ public partial class MainWindow : Window
         this.ButtonGetCurrentData.IsEnabled = false;
         this.CurrencyDataGrid.ItemsSource = null;
 
-        NbpTableKind nbpTableKind = (NbpTableKind)Table_kind.SelectedItem;
+        NbpTableKind nbpTableKind = (NbpTableKind)TableKindCurrent.SelectedItem;
+
+        MessageRequestCurrentExchangeRates messageRequestCurrentExchangeRates = new()
+        {
+            NbpTableType = nbpTableKind
+        };
+
+        MessageResponseApplicationSx messageResponseApplicationSx = await this.applicationSx.GetCurrentExchangeRatesTable(messageRequestCurrentExchangeRates);
+        if (messageResponseApplicationSx.IsSuccessed)
+        {
+            this.CurrencyDataGrid.ItemsSource = messageResponseApplicationSx.CurrencyData;
+        }
+        else
+        {
+            MessageBox.Show(messageResponseApplicationSx.Errors, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
+        this.ButtonGetCurrentData.IsEnabled = true;
+    }
+
+    private async void ButtonGetArchivedData_Click(object sender, RoutedEventArgs e)
+    {
+        this.ButtonGetCurrentData.IsEnabled = false;
+        this.CurrencyDataGrid.ItemsSource = null;
+
+        NbpTableKind nbpTableKind = (NbpTableKind)TableKindCurrent.SelectedItem;
 
         MessageRequestCurrentExchangeRates messageRequestCurrentExchangeRates = new()
         {

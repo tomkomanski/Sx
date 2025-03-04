@@ -13,19 +13,23 @@
         </LinearGradientBrush>
     </Window.Background>
     <Canvas Margin="0,0,0,0" Width="780" Height="560" HorizontalAlignment="Center" VerticalAlignment="Center">
-        <GroupBox x:Name="CurrentExchangeRates" Header="Current exchange rates:" BorderBrush="Black" Canvas.Left="10" Canvas.Top="10" HorizontalAlignment="Left" VerticalAlignment="Center" Width="197">
-            <Canvas Height="70" Width="130" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <ComboBox x:Name="Table_kind" Width="110" Canvas.Left="10" Canvas.Top="10" HorizontalAlignment="Left" VerticalAlignment="Center" Height="20"/>
-                <Button x:Name="ButtonGetCurrentData" Content="Get current data" Click="ButtonGetCurrentData_Click" RenderTransformOrigin="0.483,2.661" Canvas.Left="10" Canvas.Top="40" HorizontalAlignment="Left" VerticalAlignment="Center" Width="110" Height="20"/>
+        <GroupBox x:Name="CurrentExchangeRates" Header="Current exchange rates:" BorderBrush="Black" Width="197" Canvas.Left="10" Canvas.Top="10" HorizontalAlignment="Center" VerticalAlignment="Top">
+            <Canvas Height="78" VerticalAlignment="Center" Margin="10,0,10,0">
+                <ComboBox x:Name="TableKindCurrent" Width="42" Canvas.Left="82" Canvas.Top="13" HorizontalAlignment="Center" VerticalAlignment="Center" Height="22"/>
+                <Button x:Name="ButtonGetCurrentData" Content="Get current data" Click="ButtonGetCurrentData_Click" RenderTransformOrigin="0.483,2.661" Canvas.Left="10" Canvas.Top="46" HorizontalAlignment="Center" VerticalAlignment="Center" Width="110" Height="22"/>
+                <Label Content="Table:" Canvas.Top="10" Canvas.Left="10" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </Canvas>
         </GroupBox>
         <DataGrid x:Name="CurrencyDataGrid" IsReadOnly="True" AutoGenerateColumns="True" Height="540" Canvas.Left="212" Canvas.Top="10" Width="558" HorizontalAlignment="Center" VerticalAlignment="Center" ColumnWidth="*"/>
-        <GroupBox x:Name="ArchivedExchangeRates" Height="128" Header="Archived exchange rates:" BorderBrush="Black" Width="197" Canvas.Left="10" Canvas.Top="108" HorizontalAlignment="Center" VerticalAlignment="Top">
-            <Canvas Height="94" Width="166" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <Label Content="Year:"/>
-                <Label Content="Month:" Canvas.Top="29"/>
-                <TextBox x:Name="TextBoxYear" Canvas.Left="83" TextWrapping="Wrap" Canvas.Top="4" Width="73" HorizontalAlignment="Center" VerticalAlignment="Center" Height="21" PreviewTextInput="TextOnlyFourDigitAndControl" TextChanged="TextYearValidating" LostFocus="TextLostFocus"/>
-                <ComboBox x:Name="ComboBoxMonths" Canvas.Left="83" Canvas.Top="31" Width="73" HorizontalAlignment="Left" VerticalAlignment="Center" DropDownOpened="ComboBoxMonthFilling"/>
+        <GroupBox x:Name="ArchivedExchangeRates" Header="Archived exchange rates:" BorderBrush="Black" Width="197" Canvas.Left="10" Canvas.Top="128" HorizontalAlignment="Center" VerticalAlignment="Top">
+            <Canvas Height="138" VerticalAlignment="Center" Margin="10,0,10,0">
+                <Label Content="Year:" HorizontalAlignment="Left" Canvas.Top="41" VerticalAlignment="Top" Canvas.Left="10"/>
+                <Label Content="Month:" Canvas.Top="72" HorizontalAlignment="Center" VerticalAlignment="Top" Canvas.Left="10"/>
+                <TextBox x:Name="TextBoxYear" Canvas.Left="83" TextWrapping="Wrap" Canvas.Top="43" Width="60" HorizontalAlignment="Left" VerticalAlignment="Center" Height="22" PreviewTextInput="TextOnlyFourDigitAndControl" TextChanged="TextYearValidating" LostFocus="TextLostFocus"/>
+                <ComboBox x:Name="ComboBoxMonths" Canvas.Left="83" Canvas.Top="75" Width="73" HorizontalAlignment="Center" VerticalAlignment="Top" DropDownOpened="ComboBoxMonthFilling" Height="22"/>
+                <ComboBox x:Name="TableKindArchived" Width="48" Canvas.Left="83" Canvas.Top="13" Height="22" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Label Content="Table:" Canvas.Top="10" HorizontalAlignment="Center" VerticalAlignment="Center" Canvas.Left="10"/>
+                <Button x:Name="ButtonGetArchivedData" Content="Get archived data" Click="ButtonGetArchivedData_Click" RenderTransformOrigin="0.483,2.661" Canvas.Left="10" Canvas.Top="106" Width="110" Height="22" HorizontalAlignment="Center" VerticalAlignment="Top"/>
             </Canvas>
         </GroupBox>
     </Canvas>
