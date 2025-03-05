@@ -42,23 +42,7 @@ namespace Sx.ApplicationServices
                     MessageResponseDataNbp messageResponseDataNbp = this.dataNbp.GetNbpData(messageRequestDataNbp);
                     if (messageResponseDataNbp.IsSuccessed)
                     {
-                        List<CurrencyData> currencyData = new();
-                        foreach (ExchangeRateTable i in messageResponseDataNbp.ExchangeRateTables)
-                        {
-                            String date = i.EffectiveDate.ToString("dd.MM.yyyy");
-                            foreach (ExchangeRate j in i.Rates)
-                            {
-                                CurrencyData item = new()
-                                {
-                                    DateTime = date,
-                                    Currency = j.Currency,
-                                    Code = j.Code,
-                                    Mid = j.Mid
-                                };
-
-                                currencyData.Add(item);
-                            }
-                        }
+                        List<CurrencyData> currencyData = new(this.DataFlattening(messageResponseDataNbp.ExchangeRateTables));
 
                         messageApplicationSx.SetCurrencyData(currencyData);
                     }
@@ -74,10 +58,101 @@ namespace Sx.ApplicationServices
             }
             else
             {
-                messageApplicationSx.AddError($"{this.GetType().Name}, Intgernal error");
+                messageApplicationSx.AddError($"{this.GetType().Name}, Intgernal error.");
             }
 
             return messageApplicationSx;
+        }
+
+        public async Task<MessageResponseApplicationSx> GetArchivedExchangeRatesTable(MessageRequestApplicationSx messageRequestApplicationSx)
+        {
+            MessageResponseApplicationSx messageApplicationSx = new();
+
+            if (messageRequestApplicationSx is MessageRequestArchivedExchangeRates messageRequestArchivedExchangeRates)
+            {
+                if (!messageRequestArchivedExchangeRates.Year.HasValue)
+                {
+                    messageApplicationSx.AddError($"Invalid year. Please enter a year between 2000 and {DateTime.Now.Year}.");
+                }
+
+                if (!messageRequestArchivedExchangeRates.Month.HasValue)
+                {
+                    messageApplicationSx.AddError("Invalid month. Please select a month from the list.");
+                    
+                }
+
+                if (messageApplicationSx.IsSuccessed)
+                {
+                    DateTime dateStart = new DateTime((Int32)messageRequestArchivedExchangeRates.Year, (Int32)messageRequestArchivedExchangeRates.Month, 1);
+                    Int32 lastDayOfMonth = DateTime.DaysInMonth((Int32)messageRequestArchivedExchangeRates.Year, (Int32)messageRequestArchivedExchangeRates.Month);
+                    DateTime dateStop = new DateTime((Int32)messageRequestArchivedExchangeRates.Year, (Int32)messageRequestArchivedExchangeRates.Month, lastDayOfMonth);
+
+                    if (dateStart.Year == DateTime.Now.Year && dateStart.Month == DateTime.Now.Month)
+                    {
+                        dateStop = new DateTime(dateStart.Year, dateStart.Month, DateTime.Now.Day);
+                    }
+
+                    String url = this.configurationSx.Url + $"tables/{messageRequestArchivedExchangeRates.NbpTableType}/{dateStart.ToString("yyyy-MM-dd")}/{dateStop.ToString("yyyy-MM-dd")}/";
+
+                    MessageRequestConnector messageRequestConnector = new()
+                    {
+                        Url = url
+                    };
+
+                    MessageResponseConnector messageResponseConnector = await this.connectorApiClient.GetDataFromApi(messageRequestConnector);
+                    if (messageResponseConnector.IsSuccessed)
+                    {
+                        MessageRequestDataNbp messageRequestDataNbp = new();
+                        messageRequestDataNbp.SetData(messageResponseConnector.Data);
+
+                        MessageResponseDataNbp messageResponseDataNbp = this.dataNbp.GetNbpData(messageRequestDataNbp);
+                        if (messageResponseDataNbp.IsSuccessed)
+                        {
+                            List<CurrencyData> currencyData = new(this.DataFlattening(messageResponseDataNbp.ExchangeRateTables));
+
+                            messageApplicationSx.SetCurrencyData(currencyData);
+                        }
+                        else
+                        {
+                            messageApplicationSx.AddError(messageResponseDataNbp.Errors);
+                        }
+                    }
+                    else
+                    {
+                        messageApplicationSx.AddError(messageResponseConnector.Errors);
+                    }
+                }
+            }
+            else
+            {
+                messageApplicationSx.AddError($"{this.GetType().Name}, Intgernal error.");
+            }
+
+            return messageApplicationSx;
+        }
+
+        private IEnumerable<CurrencyData> DataFlattening(IEnumerable<ExchangeRateTable> data)
+        {
+            List<CurrencyData> currencyData = new();
+
+            foreach (ExchangeRateTable i in data)
+            {
+                String date = i.EffectiveDate.ToString("dd.MM.yyyy");
+                foreach (ExchangeRate j in i.Rates)
+                {
+                    CurrencyData item = new()
+                    {
+                        DateTime = date,
+                        Currency = j.Currency,
+                        Code = j.Code,
+                        Mid = j.Mid
+                    };
+
+                    currencyData.Add(item);
+                }
+            }
+
+            return currencyData;
         }
     }
 }

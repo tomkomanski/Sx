@@ -40,11 +40,9 @@ public partial class MainWindow : Window
         this.ButtonGetCurrentData.IsEnabled = false;
         this.CurrencyDataGrid.ItemsSource = null;
 
-        NbpTableKind nbpTableKind = (NbpTableKind)TableKindCurrent.SelectedItem;
-
         MessageRequestCurrentExchangeRates messageRequestCurrentExchangeRates = new()
         {
-            NbpTableType = nbpTableKind
+            NbpTableType = (NbpTableKind)this.TableKindCurrent.SelectedItem,
         };
 
         MessageResponseApplicationSx messageResponseApplicationSx = await this.applicationSx.GetCurrentExchangeRatesTable(messageRequestCurrentExchangeRates);
@@ -62,17 +60,29 @@ public partial class MainWindow : Window
 
     private async void ButtonGetArchivedData_Click(object sender, RoutedEventArgs e)
     {
-        this.ButtonGetCurrentData.IsEnabled = false;
+        this.ButtonGetArchivedData.IsEnabled = false;
         this.CurrencyDataGrid.ItemsSource = null;
 
-        NbpTableKind nbpTableKind = (NbpTableKind)TableKindCurrent.SelectedItem;
-
-        MessageRequestCurrentExchangeRates messageRequestCurrentExchangeRates = new()
+        Int32? year = null;
+        if (Int32.TryParse(this.TextBoxYear.Text, out Int32 cacheYear) && (cacheYear >= 2000 && cacheYear <= DateTime.Now.Year))
         {
-            NbpTableType = nbpTableKind
+            year = cacheYear;
+        }
+
+        Int32? month = null;
+        if (this.ComboBoxMonths.SelectedItem != null && ((KeyValuePair<Int32, String>)this.ComboBoxMonths.SelectedItem).Key != 0)
+        {
+            month = ((KeyValuePair<Int32, String>)this.ComboBoxMonths.SelectedItem).Key;
+        }
+
+        MessageRequestArchivedExchangeRates messageRequestArchivedExchangeRates = new()
+        {
+            NbpTableType = (NbpTableKind)this.TableKindArchived.SelectedItem,
+            Year = year,
+            Month = month,
         };
 
-        MessageResponseApplicationSx messageResponseApplicationSx = await this.applicationSx.GetCurrentExchangeRatesTable(messageRequestCurrentExchangeRates);
+        MessageResponseApplicationSx messageResponseApplicationSx = await this.applicationSx.GetArchivedExchangeRatesTable(messageRequestArchivedExchangeRates);
         if (messageResponseApplicationSx.IsSuccessed)
         {
             this.CurrencyDataGrid.ItemsSource = messageResponseApplicationSx.CurrencyData;
@@ -82,7 +92,7 @@ public partial class MainWindow : Window
             MessageBox.Show(messageResponseApplicationSx.Errors, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
-        this.ButtonGetCurrentData.IsEnabled = true;
+        this.ButtonGetArchivedData.IsEnabled = true;
     }
 
     private void TextOnlyFourDigitAndControl(object sender, TextCompositionEventArgs e)
@@ -115,6 +125,8 @@ public partial class MainWindow : Window
 
     private void TextYearValidating(object sender, TextChangedEventArgs e)
     {
+        this.ComboBoxMonths.ItemsSource = null;
+
         Int32 year;
         if (String.IsNullOrEmpty(this.TextBoxYear.Text))
         {
@@ -185,7 +197,7 @@ public partial class MainWindow : Window
                     months.Add(i, monthsPattern[i]);
                 }
 
-                this.ComboBoxMonths.ItemsSource = months.Values;
+                this.ComboBoxMonths.ItemsSource = months;
             }
             else if (year < DateTime.Now.Year)
             {
@@ -194,7 +206,7 @@ public partial class MainWindow : Window
                     months.Add(i, monthsPattern[i]);
                 }
 
-                this.ComboBoxMonths.ItemsSource = months.Values;
+                this.ComboBoxMonths.ItemsSource = months;
             }
             else
             {

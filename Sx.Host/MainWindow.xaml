@@ -25,8 +25,8 @@
             <Canvas Height="138" VerticalAlignment="Center" Margin="10,0,10,0">
                 <Label Content="Year:" HorizontalAlignment="Left" Canvas.Top="41" VerticalAlignment="Top" Canvas.Left="10"/>
                 <Label Content="Month:" Canvas.Top="72" HorizontalAlignment="Center" VerticalAlignment="Top" Canvas.Left="10"/>
-                <TextBox x:Name="TextBoxYear" Canvas.Left="83" TextWrapping="Wrap" Canvas.Top="43" Width="60" HorizontalAlignment="Left" VerticalAlignment="Center" Height="22" PreviewTextInput="TextOnlyFourDigitAndControl" TextChanged="TextYearValidating" LostFocus="TextLostFocus"/>
-                <ComboBox x:Name="ComboBoxMonths" Canvas.Left="83" Canvas.Top="75" Width="73" HorizontalAlignment="Center" VerticalAlignment="Top" DropDownOpened="ComboBoxMonthFilling" Height="22"/>
+                <TextBox x:Name="TextBoxYear" Canvas.Left="83" TextWrapping="Wrap" Canvas.Top="43" Width="48" HorizontalAlignment="Left" VerticalAlignment="Center" Height="22" PreviewTextInput="TextOnlyFourDigitAndControl" TextChanged="TextYearValidating" LostFocus="TextLostFocus"/>
+                <ComboBox x:Name="ComboBoxMonths" Canvas.Left="83" Canvas.Top="75" Width="73" HorizontalAlignment="Center" VerticalAlignment="Top" DropDownOpened="ComboBoxMonthFilling" DisplayMemberPath="Value" Height="22"/>
                 <ComboBox x:Name="TableKindArchived" Width="48" Canvas.Left="83" Canvas.Top="13" Height="22" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 <Label Content="Table:" Canvas.Top="10" HorizontalAlignment="Center" VerticalAlignment="Center" Canvas.Left="10"/>
                 <Button x:Name="ButtonGetArchivedData" Content="Get archived data" Click="ButtonGetArchivedData_Click" RenderTransformOrigin="0.483,2.661" Canvas.Left="10" Canvas.Top="106" Width="110" Height="22" HorizontalAlignment="Center" VerticalAlignment="Top"/>
