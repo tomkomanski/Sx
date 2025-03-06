@@ -57,6 +57,11 @@ namespace Sx.ConnectorServices
                     messageResponseConnector.AddError($"API: {ex.Message}");
                 }
             }
+            catch (Exception ex)
+            {
+                messageResponseConnector.AddError($"API: {ex.Message}");
+
+            }
 
             return messageResponseConnector;
         }
