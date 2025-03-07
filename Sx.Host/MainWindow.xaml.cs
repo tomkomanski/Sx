@@ -48,7 +48,15 @@ public partial class MainWindow : Window
         MessageResponseApplicationSx messageResponseApplicationSx = await this.applicationSx.GetCurrentExchangeRatesTable(messageRequestApplicationSx);
         if (messageResponseApplicationSx.IsSuccessed)
         {
-            this.CurrencyDataGrid.ItemsSource = messageResponseApplicationSx.CurrencyData;
+            if (messageRequestApplicationSx.NbpTableType == NbpTableKind.A || messageRequestApplicationSx.NbpTableType == NbpTableKind.B)
+            {
+                this.CurrencyDataGrid.ItemsSource = messageResponseApplicationSx.CurrencyDataAB;
+            }
+
+            if (messageRequestApplicationSx.NbpTableType == NbpTableKind.C)
+            {
+                this.CurrencyDataGrid.ItemsSource = messageResponseApplicationSx.CurrencyDataC;
+            }
         }
         else
         {
@@ -85,7 +93,15 @@ public partial class MainWindow : Window
         MessageResponseApplicationSx messageResponseApplicationSx = await this.applicationSx.GetArchivedExchangeRatesTable(messageRequestApplicationSx);
         if (messageResponseApplicationSx.IsSuccessed)
         {
-            this.CurrencyDataGrid.ItemsSource = messageResponseApplicationSx.CurrencyData;
+            if (messageRequestApplicationSx.NbpTableType == NbpTableKind.A || messageRequestApplicationSx.NbpTableType == NbpTableKind.B)
+            {
+                this.CurrencyDataGrid.ItemsSource = messageResponseApplicationSx.CurrencyDataAB;
+            }
+
+            if (messageRequestApplicationSx.NbpTableType == NbpTableKind.C)
+            {
+                this.CurrencyDataGrid.ItemsSource = messageResponseApplicationSx.CurrencyDataC;
+            }
         }
         else
         {

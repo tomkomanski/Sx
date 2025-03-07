@@ -23,7 +23,7 @@ namespace Sx.ApplicationServices
 
         public async Task<MessageResponseApplicationSx> GetCurrentExchangeRatesTable(MessageRequestApplicationSx messageRequestApplicationSx)
         {
-            MessageResponseApplicationSx messageApplicationSx = new();
+            MessageResponseApplicationSx messageApplicationSx = new(messageRequestApplicationSx.NbpTableType);
 
             if (messageRequestApplicationSx is MessageRequestCurrentExchangeRates messageRequestCurrentExchangeRates)
             {
@@ -39,16 +39,34 @@ namespace Sx.ApplicationServices
                     MessageRequestDataNbp messageRequestDataNbp = new();
                     messageRequestDataNbp.SetData(messageResponseConnector.Data);
 
-                    MessageResponseDataNbp messageResponseDataNbp = this.dataNbp.GetNbpData(messageRequestDataNbp);
-                    if (messageResponseDataNbp.IsSuccessed)
+                    if (messageRequestApplicationSx.NbpTableType == NbpTableKind.A || messageRequestApplicationSx.NbpTableType == NbpTableKind.B)
                     {
-                        List<CurrencyData> currencyData = new(this.DataFlattening(messageResponseDataNbp.ExchangeRateTables));
+                        MessageResponseDataNbp<ExchangeRateTableAB> messageResponseDataNbp = this.dataNbp.GetNbpDataAB(messageRequestDataNbp);
+                        if (messageResponseDataNbp.IsSuccessed)
+                        {
+                            List<CurrencyDataAB> currencyData = new(this.DataFlatteningAB(messageResponseDataNbp.ExchangeRateTables));
 
-                        messageApplicationSx.SetCurrencyData(currencyData);
+                            messageApplicationSx.SetCurrencyData(currencyData);
+                        }
+                        else
+                        {
+                            messageApplicationSx.AddError(messageResponseDataNbp.Errors);
+                        }
                     }
-                    else
+
+                    if (messageRequestApplicationSx.NbpTableType == NbpTableKind.C)
                     {
-                        messageApplicationSx.AddError(messageResponseDataNbp.Errors);
+                        MessageResponseDataNbp<ExchangeRateTableC> messageResponseDataNbp = this.dataNbp.GetNbpDataC(messageRequestDataNbp);
+                        if (messageResponseDataNbp.IsSuccessed)
+                        {
+                            List<CurrencyDataC> currencyData = new(this.DataFlatteningC(messageResponseDataNbp.ExchangeRateTables));
+
+                            messageApplicationSx.SetCurrencyData(currencyData);
+                        }
+                        else
+                        {
+                            messageApplicationSx.AddError(messageResponseDataNbp.Errors);
+                        }
                     }
                 }
                 else
@@ -66,7 +84,7 @@ namespace Sx.ApplicationServices
 
         public async Task<MessageResponseApplicationSx> GetArchivedExchangeRatesTable(MessageRequestApplicationSx messageRequestApplicationSx)
         {
-            MessageResponseApplicationSx messageApplicationSx = new();
+            MessageResponseApplicationSx messageApplicationSx = new(messageRequestApplicationSx.NbpTableType);
 
             if (messageRequestApplicationSx is MessageRequestArchivedExchangeRates messageRequestArchivedExchangeRates)
             {
@@ -105,16 +123,34 @@ namespace Sx.ApplicationServices
                         MessageRequestDataNbp messageRequestDataNbp = new();
                         messageRequestDataNbp.SetData(messageResponseConnector.Data);
 
-                        MessageResponseDataNbp messageResponseDataNbp = this.dataNbp.GetNbpData(messageRequestDataNbp);
-                        if (messageResponseDataNbp.IsSuccessed)
+                        if (messageRequestApplicationSx.NbpTableType == NbpTableKind.A || messageRequestApplicationSx.NbpTableType == NbpTableKind.B)
                         {
-                            List<CurrencyData> currencyData = new(this.DataFlattening(messageResponseDataNbp.ExchangeRateTables));
+                            MessageResponseDataNbp<ExchangeRateTableAB> messageResponseDataNbp = this.dataNbp.GetNbpDataAB(messageRequestDataNbp);
+                            if (messageResponseDataNbp.IsSuccessed)
+                            {
+                                List<CurrencyDataAB> currencyData = new(this.DataFlatteningAB(messageResponseDataNbp.ExchangeRateTables));
 
-                            messageApplicationSx.SetCurrencyData(currencyData);
+                                messageApplicationSx.SetCurrencyData(currencyData);
+                            }
+                            else
+                            {
+                                messageApplicationSx.AddError(messageResponseDataNbp.Errors);
+                            }
                         }
-                        else
+
+                        if (messageRequestApplicationSx.NbpTableType == NbpTableKind.C)
                         {
-                            messageApplicationSx.AddError(messageResponseDataNbp.Errors);
+                            MessageResponseDataNbp<ExchangeRateTableC> messageResponseDataNbp = this.dataNbp.GetNbpDataC(messageRequestDataNbp);
+                            if (messageResponseDataNbp.IsSuccessed)
+                            {
+                                List<CurrencyDataC> currencyData = new(this.DataFlatteningC(messageResponseDataNbp.ExchangeRateTables));
+
+                                messageApplicationSx.SetCurrencyData(currencyData);
+                            }
+                            else
+                            {
+                                messageApplicationSx.AddError(messageResponseDataNbp.Errors);
+                            }
                         }
                     }
                     else
@@ -131,21 +167,46 @@ namespace Sx.ApplicationServices
             return messageApplicationSx;
         }
 
-        private IEnumerable<CurrencyData> DataFlattening(IEnumerable<ExchangeRateTable> data)
+        private IEnumerable<CurrencyDataAB> DataFlatteningAB(IEnumerable<ExchangeRateTableAB> data)
         {
-            List<CurrencyData> currencyData = new();
+            List<CurrencyDataAB> currencyData = new();
 
-            foreach (ExchangeRateTable i in data)
+            foreach (ExchangeRateTableAB i in data)
             {
                 String date = i.EffectiveDate.ToString("dd.MM.yyyy");
-                foreach (ExchangeRate j in i.Rates)
+                foreach (ExchangeRateAB j in i.Rates)
                 {
-                    CurrencyData item = new()
+                    CurrencyDataAB item = new()
                     {
-                        DateTime = date,
+                        Date = date,
                         Currency = j.Currency,
                         Code = j.Code,
                         Mid = j.Mid
+                    };
+
+                    currencyData.Add(item);
+                }
+            }
+
+            return currencyData;
+        }
+
+        private IEnumerable<CurrencyDataC> DataFlatteningC(IEnumerable<ExchangeRateTableC> data)
+        {
+            List<CurrencyDataC> currencyData = new();
+
+            foreach (ExchangeRateTableC i in data)
+            {
+                String date = i.EffectiveDate.ToString("dd.MM.yyyy");
+                foreach (ExchangeRateC j in i.Rates)
+                {
+                    CurrencyDataC item = new()
+                    {
+                        Date = date,
+                        Currency = j.Currency,
+                        Code = j.Code,
+                        Bid = j.Bid,
+                        Ask = j.Ask
                     };
 
                     currencyData.Add(item);

@@ -5,22 +5,54 @@ namespace Sx.Messages.ApplicationServices
 {
     public class MessageResponseApplicationSx : MessageResponseErrors
     {
-        private List<CurrencyData> currencyData = new();
+        private readonly List<CurrencyDataAB> currencyDataAB = new();
+        private readonly List<CurrencyDataC> currencyDataC = new();
+        private readonly NbpTableKind nbpTableKind;
 
-        public IEnumerable<CurrencyData> CurrencyData
+        public IEnumerable<CurrencyDataAB> CurrencyDataAB
         {
             get
             {
-                return this.currencyData;
+                return this.currencyDataAB;
             }
         }
 
-        public void SetCurrencyData(IEnumerable<CurrencyData> currencyData)
+        public IEnumerable<CurrencyDataC> CurrencyDataC
         {
-            this.currencyData.Clear();
-            if (currencyData != null)
+            get
             {
-                this.currencyData.AddRange(currencyData);
+                return this.currencyDataC;
+            }
+        }
+
+        public NbpTableKind NbpTableKind
+        {
+            get
+            {
+                return this.nbpTableKind;
+            }
+        }
+
+        public MessageResponseApplicationSx(NbpTableKind nbpTableKind)
+        {
+            this.nbpTableKind = nbpTableKind;
+        }
+
+        public void SetCurrencyData(IEnumerable<CurrencyDataAB> currencyDataAB)
+        {
+            this.currencyDataAB.Clear();
+            if (currencyDataAB != null)
+            {
+                this.currencyDataAB.AddRange(currencyDataAB);
+            }
+        }
+
+        public void SetCurrencyData(IEnumerable<CurrencyDataC> currencyDataC)
+        {
+            this.currencyDataC.Clear();
+            if (currencyDataC != null)
+            {
+                this.currencyDataC.AddRange(currencyDataC);
             }
         }
     }

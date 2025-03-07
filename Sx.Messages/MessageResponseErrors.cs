@@ -4,7 +4,7 @@ namespace Sx.Messages
 {
     public class MessageResponseErrors
     {
-        private List<String> errorDescriptions = new();
+        private readonly List<String> errorDescriptions = new();
 
         public Boolean IsSuccessed
         {

@@ -1,13 +1,12 @@
 ﻿using System;
-using Sx.Models;
 
 namespace Sx.Messages.DataServices
 {
-    public class MessageResponseDataNbp : MessageResponseErrors
+    public class MessageResponseDataNbp<T> : MessageResponseErrors
     {
-        private List<ExchangeRateTable> exchangeRateTables = new();
+        private List<T> exchangeRateTables = new();
 
-        public IEnumerable<ExchangeRateTable> ExchangeRateTables 
+        public IEnumerable<T> ExchangeRateTables
         {
             get
             {
@@ -15,7 +14,7 @@ namespace Sx.Messages.DataServices
             }
         }
 
-        public void SetExchangeRateTables(IEnumerable<ExchangeRateTable> exchangeRateTables)
+        public void SetExchangeRateTables(IEnumerable<T> exchangeRateTables)
         {
             this.exchangeRateTables.Clear();
             if (exchangeRateTables != null)

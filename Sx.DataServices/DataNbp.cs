@@ -9,13 +9,30 @@ namespace Sx.DataServices
     {
         public DataNbp() { }
 
-        public MessageResponseDataNbp GetNbpData(MessageRequestDataNbp messageRequestDataNbp)
+        public MessageResponseDataNbp<ExchangeRateTableAB> GetNbpDataAB(MessageRequestDataNbp messageRequestDataNbp)
         {
-            MessageResponseDataNbp messageResponseDataNbp = new();
+            MessageResponseDataNbp<ExchangeRateTableAB> messageResponseDataNbp = new();
 
             try
             {
-                ExchangeRateTable[] currencyRates = JsonSerializer.Deserialize<ExchangeRateTable[]>(messageRequestDataNbp.Data);
+                ExchangeRateTableAB[] currencyRates = JsonSerializer.Deserialize<ExchangeRateTableAB[]>(messageRequestDataNbp.Data);
+                messageResponseDataNbp.SetExchangeRateTables(currencyRates);
+            }
+            catch (Exception ex)
+            {
+                messageResponseDataNbp.AddError(ex.Message);
+            }
+
+            return messageResponseDataNbp;
+        }
+
+        public MessageResponseDataNbp<ExchangeRateTableC> GetNbpDataC(MessageRequestDataNbp messageRequestDataNbp)
+        {
+            MessageResponseDataNbp<ExchangeRateTableC> messageResponseDataNbp = new();
+
+            try
+            {
+                ExchangeRateTableC[] currencyRates = JsonSerializer.Deserialize<ExchangeRateTableC[]>(messageRequestDataNbp.Data);
                 messageResponseDataNbp.SetExchangeRateTables(currencyRates);
             }
             catch (Exception ex)

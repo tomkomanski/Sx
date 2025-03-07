@@ -23,7 +23,7 @@ namespace Sx.Host
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            MainWindow? mainWindow = this.serviceProvider.GetService<MainWindow>();
+            MainWindow mainWindow = this.serviceProvider.GetService<MainWindow>();
             mainWindow.Show();
         }
 
