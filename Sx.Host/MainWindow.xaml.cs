@@ -40,12 +40,12 @@ public partial class MainWindow : Window
         this.ButtonGetCurrentData.IsEnabled = false;
         this.CurrencyDataGrid.ItemsSource = null;
 
-        MessageRequestCurrentExchangeRates messageRequestCurrentExchangeRates = new()
+        MessageRequestApplicationSx messageRequestApplicationSx = new MessageRequestCurrentExchangeRates()
         {
             NbpTableType = (NbpTableKind)this.TableKindCurrent.SelectedItem,
         };
 
-        MessageResponseApplicationSx messageResponseApplicationSx = await this.applicationSx.GetCurrentExchangeRatesTable(messageRequestCurrentExchangeRates);
+        MessageResponseApplicationSx messageResponseApplicationSx = await this.applicationSx.GetCurrentExchangeRatesTable(messageRequestApplicationSx);
         if (messageResponseApplicationSx.IsSuccessed)
         {
             this.CurrencyDataGrid.ItemsSource = messageResponseApplicationSx.CurrencyData;
@@ -75,14 +75,14 @@ public partial class MainWindow : Window
             month = ((KeyValuePair<Int32, String>)this.ComboBoxMonths.SelectedItem).Key;
         }
 
-        MessageRequestArchivedExchangeRates messageRequestArchivedExchangeRates = new()
+        MessageRequestApplicationSx messageRequestApplicationSx = new MessageRequestArchivedExchangeRates()
         {
             NbpTableType = (NbpTableKind)this.TableKindArchived.SelectedItem,
             Year = year,
             Month = month,
         };
 
-        MessageResponseApplicationSx messageResponseApplicationSx = await this.applicationSx.GetArchivedExchangeRatesTable(messageRequestArchivedExchangeRates);
+        MessageResponseApplicationSx messageResponseApplicationSx = await this.applicationSx.GetArchivedExchangeRatesTable(messageRequestApplicationSx);
         if (messageResponseApplicationSx.IsSuccessed)
         {
             this.CurrencyDataGrid.ItemsSource = messageResponseApplicationSx.CurrencyData;
